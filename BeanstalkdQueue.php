@@ -17,11 +17,11 @@ use yii\helpers\Json;
 /**
  * Beanstalkd Queue 
  *
- * @author Mani Ka <subramanian.kailash@gmail.com>
+ * @author Mani Ka <manquer@sdf.org>
  */
 class BeanstalkdQueue extends Component implements QueueInterface
 {
-   /**
+    /**
      * @var \Pheanstalk\Pheanstalk $beanstalkd
      */
     public $beanstalkd;
@@ -39,10 +39,7 @@ class BeanstalkdQueue extends Component implements QueueInterface
     public $timeout     = PheanstalkInterface::DEFAULT_TTR;
 
     /**
-     * Loads the Pheanstalk client for beanstalkd message broker / queue
-     * from configuration
-     *
-     * @throws \yii\base\InvalidConfigException
+     * @inheritdoc
      */
     public function init()
     {
@@ -53,10 +50,7 @@ class BeanstalkdQueue extends Component implements QueueInterface
     }
 
     /**
-     * @param array $message
-     * Deletes a job from
-     * @return $this
-     * @throws \yii\base\InvalidConfigException
+     * @inheritdoc
      */
     public function delete(Array $message)
     {
@@ -64,6 +58,9 @@ class BeanstalkdQueue extends Component implements QueueInterface
         return $this->beanstalkd->useTube($message['queue'])->delete(new Job($message['id'], $message['body']));
     }
 
+    /**
+     * @inheritdoc
+     */
     public function push($payload, $queue,$delay = PheanstalkInterface::DEFAULT_DELAY)
     {
         return $this->beanstalkd->putInTube(
@@ -74,6 +71,9 @@ class BeanstalkdQueue extends Component implements QueueInterface
             PheanstalkInterface::DEFAULT_TTR);
     }
 
+    /**
+     * @inheritdoc
+     */
     public function pop($queue)
     {
         $job = $this->beanstalkd->reserveFromTube($queue,$this->timeout);
@@ -84,6 +84,9 @@ class BeanstalkdQueue extends Component implements QueueInterface
         ];
     }
 
+    /**
+     * @inheritdoc
+     */
     public function release(Array $message,$delay=PheanstalkInterface::DEFAULT_DELAY)
     {
         $this->validateMessage($message);
