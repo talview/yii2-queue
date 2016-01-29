@@ -36,7 +36,7 @@ class BeanstalkdQueue extends Component implements QueueInterface
     /**
      * @var int
      */
-    public $timeout     = null;
+    public $timeout     = PheanstalkInterface::DEFAULT_TTR;
 
     /**
      * Loads the Pheanstalk client for beanstalkd message broker / queue
