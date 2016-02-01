@@ -15,7 +15,7 @@ use yii\base\InvalidConfigException;
 use yii\helpers\Json;
 
 /**
- * Beanstalkd Queue 
+ * Beanstalkd Queue
  *
  * @author Mani Ka <manquer@sdf.org>
  */
@@ -77,11 +77,14 @@ class BeanstalkdQueue extends Component implements QueueInterface
     public function pop($queue)
     {
         $job = $this->beanstalkd->reserveFromTube($queue,$this->timeout);
-        return [
-            'id'    => $job->getId(),
-            'queue' => $queue,
-            'body'  => $job->getData()
-        ];
+        if($job){
+            $job = [
+                'id'    => $job->getId(),
+                'queue' => $queue,
+                'body'  => $job->getData()
+            ];
+        }
+        return $job;
     }
 
     /**
