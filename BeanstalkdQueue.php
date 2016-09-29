@@ -36,7 +36,9 @@ class BeanstalkdQueue extends Component implements QueueInterface
     /**
      * @var int
      */
-    public $timeout     = PheanstalkInterface::DEFAULT_TTR;
+    public $timeout     = 60;
+
+    public $ttr         = PheanstalkInterface::DEFAULT_TTR
 
     /**
      * @inheritdoc
@@ -68,7 +70,7 @@ class BeanstalkdQueue extends Component implements QueueInterface
             is_string($payload) ? $payload : Json::encode($payload),
             PheanstalkInterface::DEFAULT_PRIORITY,
             $delay,
-            PheanstalkInterface::DEFAULT_TTR);
+            $this->ttr);
     }
 
     /**
